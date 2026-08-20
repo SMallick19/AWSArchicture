@@ -17,7 +17,7 @@ env:
   AWS_ACCOUNT_ID: "763103708432"
 
 jobs:
-  build:
+  OIDC-Check:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -28,7 +28,20 @@ jobs:
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: us-east-1
-      - name: Test OIDC
+  deploy:
+    runs-on: ubuntu-latest
+ 
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v4
+ 
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::763103708432:role/github-oidc-role
+          aws-region: us-east-1
+ 
+      - name: Verify AWS Identity
         run: aws sts get-caller-identity
       - name: Test Pipeline 
         run: echo "Pipeline is working fine" 
