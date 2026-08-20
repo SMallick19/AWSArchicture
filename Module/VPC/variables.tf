@@ -19,6 +19,6 @@ variable "public_subnets" {
 }
 
 variable "private_subnets" {
-    description = "Private subnets for vpc cidr"
+    description = "Private subnets for vpc cidr for test"
     type = list(string)
 }
