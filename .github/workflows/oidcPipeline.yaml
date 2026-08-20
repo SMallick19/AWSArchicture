@@ -27,7 +27,7 @@ jobs:
       - name: Test OIDC
         run: aws sts get-caller-identity
       - name: Test Pipeline 
-        run: echo "Pipeline is working fine"
+        run: echo "Pipeline is working fine" 
       # - name: Set up Terraform
       #   uses: hashicorp/setup-terraform@v2
       #   with:
