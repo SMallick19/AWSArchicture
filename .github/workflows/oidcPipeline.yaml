@@ -17,7 +17,7 @@ env:
   AWS_ACCOUNT_ID: "763103708432"
 
 jobs:
-  deploy:
+  OIDC-Check:
     runs-on: ubuntu-latest
  
     steps:
