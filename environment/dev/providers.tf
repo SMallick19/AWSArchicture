@@ -7,10 +7,10 @@ terraform {
   }
 
   backend "s3" {
-    bucket         = var.s3_bucket_name
+    bucket         = "tr-archicture-state-lock-763103708432-us-east-1-an"
     key            = "dev/terraform.tfstate"
-    region         = var.aws_region
-    dynamodb_table = var.dynamodb_table_name
+    region         = "us-east-1"
+    dynamodb_table = "archicture-tf-state-lock"
   }
 
 }
