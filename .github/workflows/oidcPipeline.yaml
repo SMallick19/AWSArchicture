@@ -33,7 +33,7 @@ jobs:
 
   Terraformm-plan:
     runs-on: ubuntu-latest
-    if: github.event_name == "pull_request"
+    if: github.event_name == 'pull_request'
 
     steps: 
       - name: Checkout Code
@@ -62,7 +62,7 @@ jobs:
   Terraformm-apply:
     runs-on: ubuntu-latest
     needs: Terraformm-plan
-    if: github.event_name == "push" && github.ref == 'refs/heads/main'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
