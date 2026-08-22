@@ -34,13 +34,13 @@ jobs:
         with:
           terraform_version: 1.15
       - name: Terraform Init
-        working-directory: ./environment/dev
+        working-directory: ./environment/${{ inputs.environment }}
         run: terraform init
       - name : Terraform Validate
-        working-directory: ./environment/dev
+        working-directory: ./environment/${{ inputs.environment }}
         run: terraform validate
       - name: Terraform Plan
-        working-directory: ./environment/dev
+        working-directory: ./environment/${{ inputs.environment }}
         run: terraform plan -out=tfplan
       - name: Save Plan Artifact
         uses: actions/upload-artifact@v4
@@ -65,7 +65,7 @@ jobs:
         with:
           terraform_version: 1.15
       - name: Terraform Init
-        working-directory: ./environment/dev
+        working-directory: ./environment/${{ inputs.environment }}
         run: terraform init
       - name: Download Plan Artifact
         uses: actions/download-artifact@v4
