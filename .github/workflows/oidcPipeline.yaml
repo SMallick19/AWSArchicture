@@ -1,6 +1,16 @@
 name: CICD pipeline for OIDC check
 
 on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Select Terraform environment"
+        required: true
+        type: choice
+        options:
+          - dev
+          - uat
+          - prod
   push:
     branches:
       - main
