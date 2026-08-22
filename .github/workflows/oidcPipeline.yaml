@@ -1,6 +1,12 @@
 name: CICD pipeline for OIDC check
 
 on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
     inputs:
       environment:
@@ -11,12 +17,7 @@ on:
           - dev
           - uat
           - prod
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main    
+
 
 permissions:
   id-token: write
