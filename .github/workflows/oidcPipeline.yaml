@@ -84,10 +84,67 @@ jobs:
         with:
           name: tfplan
           path: tfplan
+     
+
+  Terraform-dev-apply:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: Terraformm-dev-plan
+
+    environment: 
+      name: dev
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::763103708432:role/github-oidc-role
+          aws-region: us-east-1
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v4
+        with:
+          terraform_version: 1.15- 
+      - name: Terraform Init
+        working-directory: ./environment/dev
+        run: terraform init
       - name: Download Plan Artifact
         uses: actions/download-artifact@v4
         with:
           name: tfplan
       - name: Terraform Apply
         run: echo "working fine"
+  terraform-manual-deployment: 
+    name: Terraform ${{ inputs.environment }} Deployment 
+    runs-on: ubuntu-latest 
+    if: github.event_name == 'workflow_dispatch' 
+    environment: 
+      name: ${{ inputs.environment }} 
+    steps: 
+      - name: Checkout Code 
+        uses: actions/checkout@v4 
+      - name: Show Selected Environment 
+        run: echo "Deploying to ${{ inputs.environment }}" 
+      - name: Configure AWS Credentials 
+        uses: aws-actions/configure-aws-credentials@v4 
+        with: 
+          role-to-assume: arn:aws:iam::763103708432:role/github-oidc-role 
+          aws-region: us-east-1
+      - name: Setup Terraform 
+        uses: hashicorp/setup-terraform@v4
+        with: 
+          terraform_version: 1.15 
+      - name: Terraform Init 
+        working-directory: /environment/${{ inputs.environment }} 
+        run: terraform Init 
+      - name: Terraform Validate 
+        working-directory: ./environment/${{ inputs.environment }} 
+        run: terraform validate
+      - name: Terraform Plan 
+        working-directory: ./environment/${{ inputs.environment }} 
+        run: terraform plan -out=tfplan
+      - name: Terraform Apply 
+        working-directory: ./environment/${{ inputs.environment }} 
+        run: terraform apply -auto-approve tfplan
+
       
