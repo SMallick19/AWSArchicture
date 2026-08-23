@@ -27,3 +27,8 @@ variable "private_subnets" {
   description = "Private subnet CIDRs"
   type        = list(string)
 }
+
+variable "docker_image" {
+  description = "Docker Hub image to deploy"
+  type        = string
+}

@@ -16,6 +16,7 @@ permissions:
 env:
   AWS_REGION: us-east-1
   AWS_ACCOUNT_ID: "763103708432"
+  DOCKER_IMAGE: saikat98/hello-world:latest
 
 jobs:
   Terraform-plan-pr:
@@ -43,6 +44,25 @@ jobs:
       - name: Terraform Plan
         working-directory: ./environment/dev
         run: terraform plan
+  
+  Build-and-push-docker-image:
+    name: Build and push docker image
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build Docker Image
+        run: |
+          docker build -t ${{ env.DOCKER_IMAGE }} .
+      - name: Push Docker Image
+        run: |
+          docker push ${{ env.DOCKER_IMAGE }}
 
   Terraform-plan-dev:
     name: Terraform Plan - DEV
@@ -68,7 +88,7 @@ jobs:
         run: terraform validate
       - name: Terraform Plan
         working-directory: ./environment/dev
-        run: terraform plan -out=tfplan
+        run: terraform plan -var="docker_image=${{ env.DOCKER_IMAGE }}" -out=tfplan
       - name: Save Terraform Plan
         uses: actions/upload-artifact@v4
         with:
