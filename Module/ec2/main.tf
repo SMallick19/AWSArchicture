@@ -54,7 +54,7 @@ resource "aws_instance" "web" {
         aws_security_group.web.id
     ]
     associate_public_ip_address = true
-    user_data = templatefile("Module/EC2/user_data.sh", {
+    user_data = templatefile("${path.module}/user_data.sh", {
         docker_image = var.docker_image
     })
     tags = {

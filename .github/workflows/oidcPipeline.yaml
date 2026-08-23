@@ -88,7 +88,7 @@ jobs:
         run: terraform validate
       - name: Terraform Plan
         working-directory: ./environment/dev
-        run: terraform plan -out=tfplan
+        run: terraform plan -var="docker_image=${{ env.DOCKER_IMAGE }}" -out=tfplan
       - name: Save Terraform Plan
         uses: actions/upload-artifact@v4
         with:
