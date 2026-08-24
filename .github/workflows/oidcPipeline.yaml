@@ -46,7 +46,7 @@ jobs:
         run: terraform plan
 
   Terraform-plan-dev:
-    name: Terraform Plan - DEV
+    name: Terraform Plan for - DEV
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
