@@ -22,6 +22,7 @@ jobs:
   Terraform-plan-pr:
     name: Terraform Plan - PR
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     if: github.event_name == 'pull_request'
     steps:
       - name: Checkout Code
@@ -43,7 +44,7 @@ jobs:
         run: terraform validate
       - name: Terraform Plan
         working-directory: ./environment/dev
-        run: terraform plan
+        run: terraform plan -var="docker_image=${{ env.DOCKER_IMAGE }}"
   
   Build-and-push-docker-image:
     name: Build and push docker image
