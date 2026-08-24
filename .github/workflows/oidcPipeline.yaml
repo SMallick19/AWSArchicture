@@ -16,12 +16,13 @@ permissions:
 env:
   AWS_REGION: us-east-1
   AWS_ACCOUNT_ID: "763103708432"
-  DOCKER_IMAGE: saikat98/hello-world:latest
+  DOCKER_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/hello-world:latest
 
 jobs:
   Terraform-plan-pr:
     name: Terraform Plan - PR
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     if: github.event_name == 'pull_request'
     steps:
       - name: Checkout Code
@@ -43,7 +44,7 @@ jobs:
         run: terraform validate
       - name: Terraform Plan
         working-directory: ./environment/dev
-        run: terraform plan
+        run: terraform plan -var="docker_image=${{ env.DOCKER_IMAGE }}"
   
   Build-and-push-docker-image:
     name: Build and push docker image
@@ -59,7 +60,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build Docker Image
         run: |
-          docker build -t ${{ env.DOCKER_IMAGE }} .
+          docker build -t ${{ env.DOCKER_IMAGE }} ./app
       - name: Push Docker Image
         run: |
           docker push ${{ env.DOCKER_IMAGE }}
